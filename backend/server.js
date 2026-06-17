@@ -88,19 +88,22 @@ app.use('/api/puzzles',  puzzleRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const server = app.listen(PORT, () => {
-  console.log(`\n🌟 Little Muslim Genius API running on port ${PORT}`);
-  console.log(`   Environment : ${process.env.NODE_ENV || 'development'}`);
-  console.log(`   Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\n`);
-});
+// Skip listen() on Vercel — it exports `app` as a serverless handler
+if (!process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log(`\n🌟 Little Muslim Genius API running on port ${PORT}`);
+    console.log(`   Environment : ${process.env.NODE_ENV || 'development'}`);
+    console.log(`   Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\n`);
+  });
 
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`\n❌ Port ${PORT} is already in use. Kill it with:\n   npx kill-port ${PORT}\nor in PowerShell:\n   Get-NetTCPConnection -LocalPort ${PORT} | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }\n`);
-  } else {
-    console.error('Server error:', err);
-  }
-  process.exit(1);
-});
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n❌ Port ${PORT} is already in use. Kill it with:\n   npx kill-port ${PORT}\nor in PowerShell:\n   Get-NetTCPConnection -LocalPort ${PORT} | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }\n`);
+    } else {
+      console.error('Server error:', err);
+    }
+    process.exit(1);
+  });
+}
 
 export default app;
