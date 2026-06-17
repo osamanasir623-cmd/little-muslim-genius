@@ -1,5 +1,5 @@
 import prisma from '../config/prisma.js';
-import { DAYS } from '../../../src/data/content.js';
+import { DAYS } from '../data/content.js';
 
 const NEURO_TYPES   = new Set(['buildBrain','trainNetwork','layersGame','isThisACat','learningRace','designAI']);
 const DATA_TYPES    = new Set(['makeChart','dataSort','patternFinder']);
